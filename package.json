@@ -1,0 +1,29 @@
+{
+  "name": "filament-site-backend",
+  "version": "1.0.0",
+  "description": "Backend API used for the filament selling website to be made soon",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FSCWebDev/filament-site-backend.git"
+  },
+  "keywords": [
+    "mongo",
+    "express",
+    "mongosh",
+    "joi",
+    "express",
+    "sanitize",
+    "bcrypt-js",
+    "express-sessions"
+  ],
+  "author": "Jacob C Wilson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FSCWebDev/filament-site-backend/issues"
+  },
+  "homepage": "https://github.com/FSCWebDev/filament-site-backend#readme"
+}
