@@ -2,10 +2,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const compression = require("compression");
-const productRoutes = require("./routes/products");
-const orderRoutes = require("./routes/orders");
-const materialRoutes = require("./routes/materials");
-const userRoutes = require("./routes/users");
+const apiRouter = require("./routes/api.js");
 
 // Configurations
 const env = process.env.NODE_ENV || "development";
@@ -21,6 +18,7 @@ mongoose
 // Middleware being used first
 app.use(compression());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Root Route
 app.get("/", (req, res) => {
@@ -28,14 +26,12 @@ app.get("/", (req, res) => {
 });
 
 // Routes
-app.use("/products", productRoutes);
-app.use("/orders", orderRoutes);
-app.use("/materials", materialRoutes);
-app.use("/users", userRoutes);
+app.use("/api", apiRouter);
 
 // Error handler
+// TODO: Implement a general error handler
 app.use((err, req, res, next) => {
-  res.status(500).send("<h1>Error has occured.</h1>");
+  res.status(500).send(err.message);
 });
 
 // Server Listener

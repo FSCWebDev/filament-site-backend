@@ -1,0 +1,92 @@
+[
+  {
+    "type": "PLA",
+    "color": "Red",
+    "weight_remaining": 1000,
+    "status": "Available"
+  },
+  {
+    "type": "PLA",
+    "color": "Blue",
+    "weight_remaining": 750,
+    "status": "Available"
+  },
+  {
+    "type": "PLA",
+    "color": "Green",
+    "weight_remaining": 500,
+    "status": "Low"
+  },
+  {
+    "type": "PLA",
+    "color": "White",
+    "weight_remaining": 200,
+    "status": "Low"
+  },
+  {
+    "type": "PLA",
+    "color": "Black",
+    "weight_remaining": 0,
+    "status": "Out of Stock"
+  },
+  {
+    "type": "PETG",
+    "color": "Red",
+    "weight_remaining": 800,
+    "status": "Available"
+  },
+  {
+    "type": "PETG",
+    "color": "Blue",
+    "weight_remaining": 600,
+    "status": "Available"
+  },
+  {
+    "type": "PETG",
+    "color": "Green",
+    "weight_remaining": 300,
+    "status": "Low"
+  },
+  {
+    "type": "PETG",
+    "color": "White",
+    "weight_remaining": 100,
+    "status": "Low"
+  },
+  {
+    "type": "PETG",
+    "color": "Black",
+    "weight_remaining": 0,
+    "status": "Out of Stock"
+  },
+  {
+    "type": "TPU",
+    "color": "Red",
+    "weight_remaining": 500,
+    "status": "Available"
+  },
+  {
+    "type": "TPU",
+    "color": "Blue",
+    "weight_remaining": 400,
+    "status": "Available"
+  },
+  {
+    "type": "TPU",
+    "color": "Green",
+    "weight_remaining": 250,
+    "status": "Low"
+  },
+  {
+    "type": "TPU",
+    "color": "White",
+    "weight_remaining": 100,
+    "status": "Low"
+  },
+  {
+    "type": "TPU",
+    "color": "Black",
+    "weight_remaining": 0,
+    "status": "Out of Stock"
+  }
+]
