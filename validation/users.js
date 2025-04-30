@@ -1,12 +1,12 @@
 const Joi = require("joi");
 
 const usersSchema = Joi.object({
-  username: Joi.string().disallow([">", "_", "<", "."]).required(),
+  username: Joi.string().invalid(">", "_", "<", ".").required(),
   email: Joi.string().email().required(),
-  hash: Joi.string().required(),
-  role: Joi.string().allow(["buyer", "seller", "admin"]),
-  created: Joi.date().required(),
-  updated: Joi.date.required(),
+  password: Joi.string().required(),
+  role: Joi.string().valid("buyer", "seller", "admin"),
+  created: Joi.date().default(Date.now()),
+  updated: Joi.date().default(Date.now()),
 });
 
 module.exports = usersSchema;

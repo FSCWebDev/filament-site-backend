@@ -2,9 +2,10 @@ const {
   JoiValidationError,
   AlreadyCreatedObjectError,
 } = require("../utilities");
+const jwt = require("jsonwebtoken");
 
 const validateData = modelValidator => {
-  return (req, res, next) => {
+  return (req, _, next) => {
     const { value, error } = modelValidator.validate(req.body);
 
     if (error) {
@@ -17,7 +18,7 @@ const validateData = modelValidator => {
 };
 
 const findData = (Model, queryStrings) => {
-  return async (req, res, next) => {
+  return async (req, _, next) => {
     // Creates a query object from queryStrings
     const query = {};
     for (let i of queryStrings) {
@@ -25,9 +26,9 @@ const findData = (Model, queryStrings) => {
     }
 
     // Checks if document exists
-    const doc = await Model.exists(query);
+    const doc = await Model.findOne(query);
     if (doc) {
-      req.docExists = true;
+      req.foundDoc = doc;
     }
 
     next();
@@ -35,17 +36,89 @@ const findData = (Model, queryStrings) => {
 };
 
 const createData = Model => {
-  return async (req, res, next) => {
-    if (req.docExists) {
+  return async (req, _, next) => {
+    if (req.foundDoc) {
       throw new AlreadyCreatedObjectError(
         `Material with type '${req.validatedBody.type}' and color '${req.validatedBody.color}' already exists.`
       );
     }
 
-    await Model.create(req.validatedBody);
+    req.createdDoc = await Model.create(req.validatedBody);
 
     next();
   };
 };
 
-module.exports = { validateData, findData, createData };
+const updateData = () => {
+  return async (req, _, next) => {
+    if (!req.foundDoc) {
+      throw new AlreadyCreatedObjectError(`Material was not found.`);
+    }
+
+    for (let key of Object.keys(req.validatedBody)) {
+      req.foundDoc[key] = req.validatedBody[key];
+    }
+    await req.foundDoc.save();
+
+    next();
+  };
+};
+
+const updateOrCreateData = Model => {
+  return async (req, _, next) => {
+    if (!req.foundDoc) {
+      Model.create(req.validatedBody);
+      next();
+    }
+
+    for (let key of Object.keys(req.validatedBody)) {
+      req.foundDoc[key] = req.validatedBody[key];
+    }
+    await req.foundDoc.save();
+
+    next();
+  };
+};
+
+const deleteData = () => {
+  return async (req, _, next) => {
+    if (!req.foundDoc) {
+      throw new AlreadyCreatedObjectError(`Material was not found.`);
+    }
+
+    const doc = await req.foundDoc.deleteOne();
+    req.deletedDoc = doc;
+
+    next();
+  };
+};
+
+const authorizeUser = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Unauthorized access" });
+  }
+
+  const token = authHeader.split(" ")[1];
+  console.log(token);
+  console.log(process.env.JWT_SECRET);
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    res.status(401).json({ message: "Invalid token" });
+  }
+};
+
+module.exports = {
+  validateData,
+  findData,
+  createData,
+  updateData,
+  updateOrCreateData,
+  deleteData,
+  authorizeUser,
+};

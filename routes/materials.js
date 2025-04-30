@@ -1,33 +1,62 @@
 const materials = require("express").Router();
-const data = require("../data.json");
-const { validateData, findData, createData } = require("../middleware/general");
+const {
+  validateData,
+  findData,
+  createData,
+  updateData,
+  updateOrCreateData,
+  deleteData,
+} = require("../middleware/general");
 const materialValidator = require("../validation/materials");
 const Material = require("../models/materials");
 
 // TODO: Implement authorization here
-materials.get("/", (req, res) => {
-  res.json(data);
+materials.get("/", async (_, res) => {
+  const materials = await Material.find();
+  res.json(materials);
 });
 
 // TODO: Implement authorization here
 materials.post(
   "/",
   validateData(materialValidator),
-  findData(Material, ["weight_remaining"], ["color", "type"]),
+  findData(Material, ["color", "type"]),
   createData(Material),
-  async (req, res) => {
-    res.json(req.validatedData);
+  (req, res) => {
+    res.json(req.createdDoc);
   }
 );
 
 // TODO: Implement authorization here
-materials.put("/", (req, res) => {
-  res.send("Route works");
-});
+materials.put(
+  "/",
+  validateData(materialValidator),
+  findData(Material, ["color", "type"]),
+  updateOrCreateData(Material),
+  (req, res) => {
+    res.json(req.foundDoc);
+  }
+);
 
 // TODO: Implement authorization here
-materials.patch("/", (req, res) => {
-  res.send("Route works");
-});
+materials.patch(
+  "/",
+  validateData(materialValidator),
+  findData(Material, ["color", "type"]),
+  updateData(),
+  (req, res) => {
+    res.json(req.foundDoc);
+  }
+);
+
+materials.delete(
+  "/",
+  validateData(materialValidator),
+  findData(Material, ["color", "type"]),
+  deleteData(),
+  async (req, res) => {
+    res.json(req.deletedDoc);
+  }
+);
 
 module.exports = materials;

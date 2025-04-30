@@ -7,7 +7,8 @@ const materialsSchema = Joi.object({
     .description("Weight remaining in grams")
     .required(),
   spool_size: Joi.number().description("Total spool size in grams").required(),
-  status: Joi.string().valid("Available", "Low", "Out of Stock").required(),
+  status: Joi.string(),
+  date_added: Joi.date(),
 });
 
 module.exports = materialsSchema;
